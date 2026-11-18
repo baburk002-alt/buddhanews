@@ -23,7 +23,8 @@ function trimLogFile(logPath: string, maxSize: number) {
     if (!fs.existsSync(logPath) || fs.statSync(logPath).size <= maxSize) {
       return;
     }
-const lineBytes = Buffer.byteLength(`${lines[i]}\n`, "utf-8");
+
+    const lines = fs.readFileSync(logPath, "utf-8").split("\n");
     const keptLines: string[] = [];
     let keptBytes = 0;
 
