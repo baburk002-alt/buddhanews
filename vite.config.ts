@@ -104,8 +104,9 @@ export default defineConfig({
     },
   },
   envDir: PROJECT_ROOT,
-  root: path.resolve(PROJECT_ROOT, "client"),
-  publicDir: path.resolve(PROJECT_ROOT, "client", "public"),
+  // دلته بدل شو: د client فولډر پر ځای مستقیم د پروژې روټ وکارول شو
+  root: PROJECT_ROOT,
+  publicDir: path.resolve(PROJECT_ROOT, "public"),
   build: {
     outDir: path.resolve(PROJECT_ROOT, "dist/public"),
     emptyOutDir: true,
