@@ -81,7 +81,7 @@ function vitePluginManusDebugCollector(): Plugin {
             if (payload.browserConsole) writeToLogFile("browserConsole", payload.browserConsole);
             if (payload.networkRequests) writeToLogFile("networkRequests", payload.networkRequests);
             if (payload.sessionReplay) writeToLogFile("sessionReplay", payload.sessionReplay);
-            res.writeHead(200, { "Content-Type": "application/json" });
+            res.writeHead(200, { "Content-Type": "application/json"	});
             res.end(JSON.stringify({ success: true }));
           } catch (e) {
             res.writeHead(400, { "Content-Type": "application/json" });
@@ -93,7 +93,6 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-// د ناسمو او نانصب شویو پلګینونو لیرې کول ترڅو په بلډ کې خنډ نشي
 const plugins = [react(), tailwindcss(), vitePluginManusDebugCollector()];
 
 export default defineConfig({
