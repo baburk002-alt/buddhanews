@@ -3,6 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "node:path";
+
 const PROJECT_ROOT = import.meta.dirname;
 const LOG_DIR = path.join(PROJECT_ROOT, ".manus-logs");
 const MAX_LOG_SIZE_BYTES = 1 * 1024 * 1024;
@@ -11,8 +12,12 @@ const TRIM_TARGET_BYTES = Math.floor(MAX_LOG_SIZE_BYTES * 0.6);
 type LogSource = "browserConsole" | "networkRequests" | "sessionReplay";
 
 function ensureLogDir() {
-  if (!fs.existsSync(LOG_DIR)) {
-    fs.mkdirSync(LOG_DIR, { recursive: true });
+  try {
+    if (!fs.existsSync(LOG_DIR)) {
+      fs.mkdirSync(LOG_DIR, { recursive: true });
+    }
+  } catch {
+    /* ignore */
   }
 }
 
@@ -43,11 +48,15 @@ function trimLogFile(logPath: string, maxSize: number) {
 function writeToLogFile(source: LogSource, entries: unknown[]) {
   if (entries.length === 0) return;
 
-  ensureLogDir();
-  const logPath = path.join(LOG_DIR, `${source}.log`);
-  const lines = entries.map((e) => JSON.stringify(e)).join("\n") + "\n";
-  fs.appendFileSync(logPath, lines);
-  trimLogFile(logPath, MAX_LOG_SIZE_BYTES);
+  try {
+    ensureLogDir();
+    const logPath = path.join(LOG_DIR, `${source}.log`);
+    const lines = entries.map((e) => JSON.stringify(e)).join("\n") + "\n";
+    fs.appendFileSync(logPath, lines);
+    trimLogFile(logPath, MAX_LOG_SIZE_BYTES);
+  } catch {
+    /* ignore */
+  }
 }
 
 function vitePluginManusDebugCollector(): Plugin {
@@ -84,7 +93,8 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusDebugCollector()];
+// د ناسمو او نانصب شویو پلګینونو لیرې کول ترڅو په بلډ کې خنډ نشي
+const plugins = [react(), tailwindcss(), vitePluginManusDebugCollector()];
 
 export default defineConfig({
   plugins,
