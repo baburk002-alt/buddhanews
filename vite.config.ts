@@ -32,7 +32,7 @@ function trimLogFile(logPath: string, maxSize: number) {
     let keptBytes = 0;
 
     for (let i = lines.length - 1; i >= 0; i--) {
-      const lineBytes = Buffer.byteLength(`${lines[i]}\n`, "utf-8");
+      const lineBytes = Buffer.byteLength(lines[i] + "\n", "utf-8");
       if (keptBytes + lineBytes > TRIM_TARGET_BYTES) break;
       keptLines.unshift(lines[i]);
       keptBytes += lineBytes;
